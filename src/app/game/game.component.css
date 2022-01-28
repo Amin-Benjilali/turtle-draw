@@ -1,0 +1,13 @@
+.column {
+  display: inline-block;
+  height: 10px;
+}
+
+.row {
+  height: 10px;
+  width: fit-content;
+}
+
+.menu {
+  height: 20px;
+}

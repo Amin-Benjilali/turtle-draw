@@ -1,10 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css', '../styles.css']
 })
-export class AppComponent {
-  title = 'turtle-draw';
+
+export class AppComponent implements OnInit {
+  ngOnInit(): void {
+  }
+
 }
+
+

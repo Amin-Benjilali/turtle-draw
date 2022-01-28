@@ -1,0 +1,19 @@
+div {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+}
+
+.black {
+  background-color: black;
+}
+
+.red {
+  background-color: red;
+}
+
+.pencil {
+  background-image: url("../../assets/pencil.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
