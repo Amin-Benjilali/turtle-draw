@@ -1,0 +1,5 @@
+<div class="row" *ngFor="let item of rows; let index;">
+  <div class="column" *ngFor="let item of columns; let indexj;">
+    <app-tile [x]="indexj" [y]="index"></app-tile>
+  </div>
+</div>

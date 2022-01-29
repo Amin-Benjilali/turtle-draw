@@ -1,15 +1,25 @@
 <div class="menu">
-  <input matInput placeholder="Commands" id="command" name="command" [(ngModel)]="command">
-  <button (click)="move('left')">Left</button>
-  <button (click)="move('right')">Right</button>
-  <button (click)="move('up')">Up</button>
-  <button (click)="move('down')">Down</button>
-  <button (click)="changeColor()">{{pencilColor}}</button>
-  <button (click)="this.isDrawing = !this.isDrawing">{{isDrawing ? 'Draw' : 'Not drawing'}}</button>
+  <input matInput placeholder="Commands" id="command" name="command" [(ngModel)]="command" (keydown.enter)="interpretCommand()">
+  <button (click)="openDialog()">Command history</button>
+  <p> Color: {{pencilColor | firstLetterUpper}} </p>
+  <p> Pencil state: {{isDrawing ? 'Draw' : 'Not drawing'}} </p>
 </div>
 
-<div class="row" *ngFor="let item of rows; let index;">
-  <div class="column" *ngFor="let item of columns; let indexj;">
-    <app-tile [id]="(indexj + 1 + (columnInput * index))" [x]="indexj" [y]="index" ></app-tile>
+
+<app-board class="board" [pencilColor]="pencilColor" (colorChangedEvent)="pencilColor = $event" [command]="command" [isDrawing]="isDrawing" (isDrawingEvent)="isDrawing = $event" [commandHistory]="commandHistory"></app-board>
+
+
+
+<ng-template>
+  <h1 mat-dialog-title>Command history</h1>
+  <div mat-dialog-content>
+    <mat-list class="list" role="list">
+      <mat-list-item role="listitem" *ngFor="let command of commandHistory;">
+        {{command.action}} {{command.direction != null && command.direction != undefined ? command.direction : ''}} {{command.value}}
+      </mat-list-item>
+    </mat-list>
   </div>
-</div>
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close>Close</button>
+  </div>
+</ng-template>

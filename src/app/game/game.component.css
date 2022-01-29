@@ -1,13 +1,14 @@
-.column {
-  display: inline-block;
-  height: 10px;
-}
-
-.row {
-  height: 10px;
-  width: fit-content;
-}
-
 .menu {
+  background-color: rgb(200, 200, 200);
   height: 20px;
+  width: 100vw;
+}
+
+.menu p {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.list {
+  max-height: 70vh;
 }
