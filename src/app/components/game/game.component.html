@@ -3,6 +3,7 @@
   <button (click)="openDialog()">Command history</button>
   <p> Color: {{pencilColor | firstLetterUpper}} </p>
   <p> Pencil state: {{isDrawing ? 'Draw' : 'Not drawing'}} </p>
+  <button (click)="fetchCommand('5')"> fetch </button>
 </div>
 
 

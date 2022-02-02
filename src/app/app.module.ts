@@ -7,13 +7,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatGridListModule } from '@angular/material/grid-list';
 import {MatListModule} from '@angular/material/list';
 import { FormsModule } from '@angular/forms';
-import { GameComponent } from './game/game.component';
-import { TileComponent } from './tile/tile.component';
-import { BoardComponent } from './board/board.component';
+import { GameComponent } from './components/game/game.component';
+import { TileComponent } from './components/tile/tile.component';
+import { BoardComponent } from './components/board/board.component';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { MatDialogModule} from '@angular/material/dialog';
-import { Overlay } from '@angular/cdk/overlay';
-import { FirstLetterUpperPipe } from './first-letter-upper.pipe';
+import { FirstLetterUpperPipe } from './pipes/first-letter-upper.pipe';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -31,7 +31,8 @@ import { FirstLetterUpperPipe } from './first-letter-upper.pipe';
     MatListModule,
     ScrollingModule,
     FormsModule,
-    MatDialogModule
+    MatDialogModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

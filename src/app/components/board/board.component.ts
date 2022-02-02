@@ -7,7 +7,9 @@ import {
   ViewChildren,
 } from '@angular/core';
 import { TileComponent } from '../tile/tile.component';
-import { Command } from './command.model';
+import { Command } from '../../models/command.model';
+import { HttpService } from '../../services/http.service';
+import { InterpreterService } from 'src/app/services/interpreter.service';
 
 @Component({
   selector: 'app-board',
@@ -39,7 +41,11 @@ export class BoardComponent implements OnInit {
 
   @ViewChildren(TileComponent) tiles!: any;
 
-  constructor() {}
+
+  constructor(
+    private httService: HttpService,
+    private interpreterService: InterpreterService
+    ) {}
 
   ngOnInit(): void {
     this.render();
@@ -64,37 +70,9 @@ export class BoardComponent implements OnInit {
   }
 
   interpretCommand() {
-    if (this.command.toLowerCase().startsWith('move')) {
-      var currentCommand = new Command(this.command.split(' ')[0], Number(this.command.split(' ')[2]), this.command.split(' ')[1].toLowerCase())
-
-      this.commandHistory.push(currentCommand);
-      this.commandHistoryEvent.emit(this.commandHistory);
-      this.runCommand(currentCommand);
-    }
-    if (this.command.toLowerCase().startsWith('pencil') && (this.command.split(' ')[1] == 'true' || this.command.split(' ')[1] == 'false'))
-    {
-      var currentCommand = new Command('pencil', this.command.split(' ')[1] == 'true');
-
-      this.commandHistory.push(currentCommand);
-      this.commandHistoryEvent.emit(this.commandHistory);
-      this.runCommand(currentCommand);
-    }
-    if (this.command.toLowerCase().startsWith('color') && (this.command.split(' ')[1] == 'red' || this.command.split(' ')[1] == 'black'))
-    {
-      var currentCommand = new Command('color', this.command.split(' ')[1].toLowerCase());
-
-      this.commandHistory.push(currentCommand);
-      this.commandHistoryEvent.emit(this.commandHistory);
-      this.runCommand(currentCommand);
-    }
-    if(this.command.toLowerCase().startsWith('erase')) {
-      var currentCommand = new Command(this.command.split(' ')[0], Number(this.command.split(' ')[2]), this.command.split(' ')[1].toLowerCase())
-
-      this.commandHistory.push(currentCommand);
-      this.commandHistoryEvent.emit(this.commandHistory);
-      this.runCommand(currentCommand);
-    }
-    console.log(this.commandHistory);
+    var currentCommand = this.interpreterService.interpretCommand(this.command.toLowerCase(), this.commandHistory.length);
+    this.addToDb(currentCommand);
+    this.runCommand(currentCommand);
   }
 
   runCommand(command: Command) {
@@ -104,7 +82,7 @@ export class BoardComponent implements OnInit {
     }
     if(command.action == 'pencil')
     {
-      this.changeDrawingState(command.value);
+      this.changeDrawingState(command.value == 'true');
     }
     if(command.action == 'color')
     {
@@ -116,21 +94,31 @@ export class BoardComponent implements OnInit {
     }
   }
 
-  move(value: number, direction?: string, isErasing: boolean = false) {
-    for (var i = 0; i < value; i++) {
+  addToDb(command: Command) {
+    command.drawingId = '5';
+    this.httService.postCommand(command).subscribe(data => {
+      command = data;
+    });
+    this.commandHistory.push(command);
+    this.commandHistoryEvent.emit(this.commandHistory);
+  }
+
+  move(value: string, direction?: string, isErasing: boolean = false) {
+    var numberValue = Number(value);
+    for (var i = 0; i < numberValue; i++) {
       this.getCurrentTile().removePencil();
       switch (direction) {
         case 'right':
-          this.maxX > this.x + 1 ? this.x++ : (i = value);
+          this.maxX > this.x + 1 ? this.x++ : (i = numberValue);
           break;
         case 'left':
-          0 <= this.x - 1 ? this.x-- : (i = value);
+          0 <= this.x - 1 ? this.x-- : (i = numberValue);
           break;
         case 'up':
-          0 <= this.y - 1 ? this.y-- : (i = value);
+          0 <= this.y - 1 ? this.y-- : (i = numberValue);
           break;
         case 'down':
-          this.maxY > this.y + 1 ? this.y++ : (i = value);
+          this.maxY > this.y + 1 ? this.y++ : (i = numberValue);
           break;
         default:
           console.log(direction + ' is not a valid direction! ');

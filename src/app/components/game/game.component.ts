@@ -1,7 +1,8 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { BoardComponent } from '../board/board.component';
-import { Command } from '../board/command.model';
+import { Command } from '../../models/command.model';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import { HttpService } from '../../services/http.service';
 
 @Component({
   selector: 'app-game',
@@ -19,8 +20,9 @@ export class GameComponent {
   isDrawing: boolean = true;
 
   constructor(
-    readonly dialog: MatDialog
-    ) {}
+    readonly dialog: MatDialog,
+    private httService: HttpService
+    ) { }
 
   interpretCommand() {
     this.board.interpretCommand();
@@ -29,5 +31,14 @@ export class GameComponent {
 
   openDialog(config?: MatDialogConfig) {
     return this.dialog.open(this.history, config)
+  }
+
+  fetchCommand(param: string) {
+    this.httService.getCommands(param).subscribe(data => {
+      for(var i = 0; i < data.length; i++)
+      {
+        this.board.runCommand(data[i]);
+      }
+    });
   }
 }

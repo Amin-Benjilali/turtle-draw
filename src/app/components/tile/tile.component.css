@@ -14,7 +14,7 @@ div {
 }
 
 .pencil {
-  background-image: url("../../assets/pencil.png");
+  background-image: url("../../../assets/pencil.png");
   background-size: contain;
   background-repeat: no-repeat;
 }
